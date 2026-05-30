@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Andrei – Agent AI Vânzări</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap');
+:root {
+  --bg:#0d0a1a;--surface:#16102a;--card:#1e1635;
+  --accent:#8b5cf6;--accent2:#ec4899;--text:#ede9ff;
+  --muted:#7060a0;--border:#2a2040;--green:#10b981;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;}
+.header{width:100%;background:linear-gradient(135deg,#1a1028,#2d1b4e);padding:16px 20px;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
+.avatar{width:44px;height:44px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3rem;box-shadow:0 0 20px rgba(139,92,246,0.4);flex-shrink:0;}
+.hinfo h1{font-size:0.98rem;font-weight:700;}
+.hinfo p{font-size:0.72rem;color:var(--muted);margin-top:2px;}
+.online{margin-left:auto;display:flex;align-items:center;gap:6px;font-size:0.72rem;color:var(--green);}
+.online-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+.main{width:100%;max-width:640px;padding:24px 16px;display:flex;flex-direction:column;gap:20px;flex:1;}
+.orb-wrap{display:flex;flex-direction:column;align-items:center;gap:16px;padding:10px 0;}
+.orb{width:120px;height:120px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#a78bfa,#6d28d9,#1a1028);display:flex;align-items:center;justify-content:center;font-size:2.8rem;box-shadow:0 0 40px rgba(139,92,246,0.3);position:relative;transition:box-shadow 0.3s;}
+.orb.speaking{box-shadow:0 0 70px rgba(139,92,246,0.8),0 0 120px rgba(236,72,153,0.3);animation:pulse 0.8s ease-in-out infinite;}
+.orb.listening{box-shadow:0 0 70px rgba(16,185,129,0.8);animation:pulse 0.6s ease-in-out infinite;}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+.ring{position:absolute;width:100%;height:100%;border-radius:50%;border:2px solid rgba(139,92,246,0.25);animation:ring 2s ease-out infinite;}
+.ring:nth-child(2){animation-delay:0.7s;}
+@keyframes ring{0%{transform:scale(1);opacity:0.6}100%{transform:scale(1.9);opacity:0}}
+.orb-status{font-size:0.85rem;color:var(--muted);text-align:center;min-height:22px;transition:color 0.3s;}
+.orb-status.speaking{color:var(--accent);}
+.orb-status.listening{color:var(--green);}
+.transcript-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden;min-height:280px;max-height:400px;display:flex;flex-direction:column;}
+.t-header{padding:12px 18px;border-bottom:1px solid var(--border);font-size:0.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;}
+.t-scroll{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;}
+.line{display:flex;flex-direction:column;gap:4px;animation:fadein 0.3s ease;}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.line-who{font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;padding:0 4px;}
+.line-text{padding:10px 14px;border-radius:14px;font-size:0.92rem;line-height:1.6;}
+.ai .line-text{background:var(--card);border:1px solid rgba(139,92,246,0.2);color:#d4c8ff;border-radius:4px 14px 14px 14px;}
+.user .line-text{background:#0d2a1e;border:1px solid rgba(16,185,129,0.2);color:#6ee7b7;border-radius:14px 4px 14px 14px;margin-left:20px;}
+.interim .line-text{background:#0d1e12;border:1px dashed rgba(16,185,129,0.3);color:#4ade80;opacity:0.7;font-style:italic;border-radius:14px 4px 14px 14px;margin-left:20px;}
+.ctrls{display:flex;flex-direction:column;gap:12px;align-items:center;}
+.start-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:white;padding:18px 50px;border-radius:50px;font-family:'Outfit',sans-serif;font-size:1.1rem;font-weight:700;cursor:pointer;box-shadow:0 8px 30px rgba(139,92,246,0.4);transition:all 0.2s;}
+.start-btn:hover{transform:translateY(-2px);}
+.mic-btn{width:70px;height:70px;border-radius:50%;border:2px solid var(--border);font-size:1.8rem;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;background:var(--surface);color:var(--muted);}
+.mic-btn.active{background:linear-gradient(135deg,var(--green),#059669);border-color:var(--green);color:white;box-shadow:0 6px 24px rgba(16,185,129,0.5);animation:pulse 1s ease-in-out infinite;}
+.mic-btn:disabled{opacity:0.3;cursor:not-allowed;animation:none;}
+.hint{font-size:0.78rem;color:var(--muted);text-align:center;}
+.error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:12px;padding:12px 16px;font-size:0.83rem;color:#fca5a5;display:none;}
+.error.show{display:block;}
+.manual{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px;display:none;}
+.manual.show{display:block;}
+.manual p{font-size:0.78rem;color:var(--muted);margin-bottom:10px;}
+.manual-row{display:flex;gap:8px;}
+.manual-row input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-family:'Outfit',sans-serif;font-size:0.9rem;}
+.manual-row input:focus{outline:none;border-color:var(--accent);}
+.manual-row input::placeholder{color:var(--muted);}
+.send-btn{background:var(--accent);border:none;border-radius:10px;color:white;padding:10px 18px;cursor:pointer;font-family:'Outfit',sans-serif;font-size:0.9rem;}
+.badge{font-size:0.68rem;color:var(--muted);text-align:center;opacity:0.6;}
+.manual-link{background:none;border:none;color:var(--muted);font-size:0.72rem;cursor:pointer;text-decoration:underline;font-family:'Outfit',sans-serif;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="avatar">🌐</div>
+  <div class="hinfo">
+    <h1>Andrei — Agent AI Vânzări</h1>
+    <p>Sistem programări online · Saloane de coafură</p>
+  </div>
+  <div class="online"><div class="online-dot"></div>Online</div>
+</div>
+
+<div class="main">
+  <div class="orb-wrap">
+    <div class="orb" id="orb"><div class="ring"></div><div class="ring"></div>🌐</div>
+    <div class="orb-status" id="orbStatus">Apasă butonul pentru a începe apelul</div>
+  </div>
+
+  <div class="transcript-box">
+    <div class="t-header">🎙️ Conversație</div>
+    <div class="t-scroll" id="transcript">
+      <div id="placeholder" style="color:var(--muted);font-size:0.85rem;text-align:center;padding:20px 0">Conversația va apărea aici...</div>
+    </div>
+  </div>
+
+  <div class="error" id="errorBox"></div>
+
+  <div class="ctrls" id="startCtrls">
+    <button class="start-btn" onclick="startCall()">📞 Începe apelul</button>
+    <p class="hint">Andrei vorbește și ascultă răspunsul tău</p>
+  </div>
+
+  <div class="ctrls" id="callCtrls" style="display:none">
+    <button class="mic-btn" id="micBtn" onclick="toggleMic()">🎤</button>
+    <p class="hint" id="micHint">Apasă microfonul ca să răspunzi</p>
+    <button class="manual-link" onclick="showManual()">Microfon nu funcționează? Scrie manual</button>
+  </div>
+
+  <div class="manual" id="manualBox">
+    <p>⌨️ Scrie ce a spus clientul:</p>
+    <div class="manual-row">
+      <input type="text" id="manualInput" placeholder="Ce a spus clientul..." onkeydown="if(event.key==='Enter')sendManual()">
+      <button class="send-btn" onclick="sendManual()">Trimite</button>
+    </div>
+  </div>
+
+  <div class="badge" id="badge">🔊 Se încarcă vocea...</div>
+</div>
+
+<script>
+const GEMINI_KEY = 'AIzaSyAb8RN6JrsJi70okirSOYnOHNc7S9WqaA7vBM3I4spiUhWlZ0Pw';
+
+const SYSTEM = `Ești Andrei, un agent de vânzări prietenos și natural. Vinzi un sistem de programări online pentru coafori, saloane de înfrumusețare, saloane de unghii, cosmeticieni.
+
+PRODUS - Web: https://fbfweb.netlify.app/
+Ce primește clientul:
+- Pagină proprie de programări online (0-24h, clientul programează singur)
+- Email automat când coaforul acceptă SAU respinge programarea
+- Email reminder în ziua programării
+- Dacă clientul anulează → email automat către coafor
+- Design modern, mobil-friendly
+Preț: 50 lei/lună SAU 500 lei/an (2 luni gratuite)
+
+STIL: Natural, uman, max 2-3 propoziții, stil telefonic. Pune mereu o întrebare.
+OBIECȚII:
+"E scump" → 1.6 lei/zi. La anual 2 luni gratis.
+"Am Facebook" → Facebook nu programează automat noaptea. Acesta da.
+"Nu mă interesează" → Câți clienți pierzi când nu răspunzi la telefon?
+"N-am timp" → Tocmai pentru asta e — să nu mai pierzi timp cu telefoanele.
+"Mă mai gândesc" → Prima lună e probă. Nu decizi acum, doar încerci.
+SCOP: Demonstrație SAU abonament imediat.
+IMPORTANT: Răspunsuri FOARTE scurte — conversație telefonică!`;
+
+let hist = [];
+let started = false;
+let isListening = false;
+let isSpeaking = false;
+let recognition = null;
+let bestVoice = null;
+
+// --- Voice setup ---
+function loadVoices() {
+  const vs = window.speechSynthesis.getVoices();
+  if (!vs.length) return;
+  const priority = [
+    v => v.name.includes('Andrei') && v.name.includes('Natural'),
+    v => v.name.includes('Andrei'),
+    v => v.name.includes('Microsoft') && v.lang === 'ro-RO',
+    v => v.lang === 'ro-RO',
+    v => v.lang.startsWith('ro'),
+    v => v.name.includes('Microsoft'),
+    v => true
+  ];
+  for (const t of priority) {
+    const f = vs.find(t);
+    if (f) { bestVoice = f; break; }
+  }
+  if (bestVoice) {
+    document.getElementById('badge').innerText = '🔊 ' + bestVoice.name.replace('Microsoft ','').replace(' Online (Natural) - Romanian (Romania)','');
+  }
+}
+window.speechSynthesis.onvoiceschanged = loadVoices;
+loadVoices();
+
+// --- TTS ---
+function speak(text, onDone) {
+  isSpeaking = true;
+  setOrb('speaking');
+  window.speechSynthesis.cancel();
+  setTimeout(() => {
+    const clean = text.replace(/[*_~`#→\[\]✔]/g,'').replace(/\n/g,' ').trim();
+    const u = new SpeechSynthesisUtterance(clean);
+    if (bestVoice) u.voice = bestVoice;
+    u.lang = 'ro-RO'; u.rate = 0.9; u.pitch = 1.0; u.volume = 1.0;
+    u.onend = () => { isSpeaking = false; setOrb('idle'); if (onDone) onDone(); };
+    u.onerror = () => { isSpeaking = false; setOrb('idle'); if (onDone) onDone(); };
+    window.speechSynthesis.speak(u);
+  }, 150);
+}
+
+// --- Gemini API ---
+async function callGemini(userMsg) {
+  hist.push({ role: 'user', parts: [{ text: userMsg }] });
+
+  const body = {
+    system_instruction: { parts: [{ text: SYSTEM }] },
+    contents: hist,
+    generationConfig: { maxOutputTokens: 150, temperature: 0.8 }
+  };
+
+  const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+
+  const d = await r.json();
+  if (d.error) throw new Error(d.error.message);
+  const txt = d.candidates?.[0]?.content?.parts?.[0]?.text || 'Eroare.';
+  hist.push({ role: 'model', parts: [{ text: txt }] });
+  return txt;
+}
+
+// --- UI helpers ---
+function setOrb(state) {
+  const orb = document.getElementById('orb');
+  const status = document.getElementById('orbStatus');
+  orb.className = 'orb ' + state;
+  if (state === 'speaking') { status.className = 'orb-status speaking'; status.innerText = 'Andrei vorbește...'; }
+  else if (state === 'listening') { status.className = 'orb-status listening'; status.innerText = 'Te ascult...'; }
+  else { status.className = 'orb-status'; status.innerText = started ? 'Apasă microfonul ca să răspunzi' : ''; }
+}
+
+function addLine(role, text) {
+  const t = document.getElementById('transcript');
+  document.getElementById('placeholder')?.remove();
+  const d = document.createElement('div');
+  d.className = 'line ' + role;
+  d.innerHTML = `<div class="line-who">${role === 'ai' ? '🌐 Andrei' : '👤 Client'}</div><div class="line-text">${text}</div>`;
+  t.appendChild(d);
+  t.scrollTop = t.scrollHeight;
+}
+
+function showInterim(text) {
+  const t = document.getElementById('transcript');
+  let el = document.getElementById('interim');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'interim'; el.className = 'line interim';
+    el.innerHTML = '<div class="line-who">🎙️ Tu</div><div class="line-text"></div>';
+    t.appendChild(el);
+  }
+  el.querySelector('.line-text').innerText = text;
+  t.scrollTop = t.scrollHeight;
+}
+
+function clearInterim() { document.getElementById('interim')?.remove(); }
+
+function showErr(msg) {
+  const e = document.getElementById('errorBox');
+  e.innerText = '⚠️ ' + msg; e.classList.add('show');
+}
+
+function showManual() { document.getElementById('manualBox').classList.add('show'); }
+
+// --- Process input ---
+async function processInput(text) {
+  if (!text.trim()) return;
+  clearInterim();
+  addLine('user', text);
+  document.getElementById('micBtn').disabled = true;
+  setOrb('idle');
+  try {
+    const reply = await callGemini(text);
+    addLine('ai', reply);
+    speak(reply, () => { document.getElementById('micBtn').disabled = false; });
+  } catch(e) {
+    showErr(e.message);
+    document.getElementById('micBtn').disabled = false;
+    setOrb('idle');
+  }
+}
+
+// --- Speech recognition ---
+function setupRecognition() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { showManual(); showErr('Browserul nu suportă recunoașterea vocală.'); return false; }
+  recognition = new SR();
+  recognition.lang = 'ro-RO';
+  recognition.continuous = false;
+  recognition.interimResults = true;
+
+  recognition.onstart = () => { isListening = true; setOrb('listening'); document.getElementById('micBtn').classList.add('active'); document.getElementById('micHint').innerText = 'Ascult...'; };
+  recognition.onend = () => { isListening = false; document.getElementById('micBtn').classList.remove('active'); clearInterim(); if (!isSpeaking) { setOrb('idle'); document.getElementById('micHint').innerText = 'Apasă microfonul ca să răspunzi'; } };
+  recognition.onspeechend = () => recognition.stop();
+  recognition.onresult = (e) => {
+    let fin = '', itr = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) fin += e.results[i][0].transcript;
+      else itr += e.results[i][0].transcript;
+    }
+    if (fin) { clearInterim(); processInput(fin); }
+    else showInterim(itr);
+  };
+  recognition.onerror = (e) => {
+    isListening = false;
+    document.getElementById('micBtn').classList.remove('active');
+    setOrb('idle');
+    if (e.error === 'not-allowed') { showErr('Acces microfon refuzat — permite accesul în browser.'); showManual(); }
+    else if (e.error === 'no-speech') document.getElementById('micHint').innerText = 'Nu am auzit nimic. Încearcă din nou!';
+  };
+  return true;
+}
+
+function toggleMic() {
+  if (isSpeaking || document.getElementById('micBtn').disabled) return;
+  if (isListening) { recognition?.stop(); }
+  else { if (!recognition) { if (!setupRecognition()) return; } try { recognition.start(); } catch(e){} }
+}
+
+// --- Start call ---
+async function startCall() {
+  document.getElementById('startCtrls').style.display = 'none';
+  document.getElementById('callCtrls').style.display = 'flex';
+  document.getElementById('callCtrls').style.flexDirection = 'column';
+  document.getElementById('callCtrls').style.alignItems = 'center';
+  document.getElementById('callCtrls').style.gap = '12px';
+  setupRecognition();
+  started = true;
+  setOrb('speaking');
+  try {
+    const opening = await callGemini('Începe apelul! Prezintă-te ca Andrei, natural și prietenos. Întreabă cum gestionează acum programările. MAX 2 propoziții!');
+    addLine('ai', opening);
+    speak(opening, () => { document.getElementById('micBtn').disabled = false; });
+  } catch(e) {
+    showErr('Eroare la pornire: ' + e.message);
+    document.getElementById('startCtrls').style.display = 'flex';
+    document.getElementById('callCtrls').style.display = 'none';
+    started = false;
+  }
+}
+
+// --- Manual send ---
+function sendManual() {
+  const inp = document.getElementById('manualInput');
+  const text = inp.value.trim();
+  if (!text) return;
+  inp.value = '';
+  processInput(text);
+}
+</script>
+</body>
+</html>
