@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beauty Directory</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#070709;--bg2:#0d0d11;--bg3:#111116;--bg4:#16161c;
+  --border:#1e1e26;--border2:#252530;
+  --gold:#c9a96e;--gold2:#e8c98a;--gold-dim:rgba(201,169,110,0.12);
+  --text:#f0ece4;--text-mid:#8a8478;--text-muted:#4a4740;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-height:100vh;overflow-x:hidden;}
+nav{position:sticky;top:0;z-index:200;background:rgba(7,7,9,.95);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);height:58px;display:flex;align-items:center;padding:0 28px;justify-content:space-between;gap:12px;}
+.logo{font-family:'Cormorant',serif;font-size:1.5rem;font-weight:300;letter-spacing:4px;text-transform:uppercase;color:var(--text);text-decoration:none;flex-shrink:0;}
+.logo em{font-style:italic;color:var(--gold);}
+.nav-actions{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;}
+.nav-count{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);white-space:nowrap;}
+.lang-bar{display:flex;gap:2px;}
+.lang-btn{background:none;border:1px solid var(--border2);border-radius:3px;color:var(--text-muted);font-family:'Outfit',sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 7px;cursor:pointer;transition:all .18s;}
+.lang-btn.active,.lang-btn:hover{border-color:var(--gold);color:var(--gold);}
+.nav-btn{background:none;border:1px solid var(--border2);border-radius:3px;color:var(--text-muted);font-family:'Outfit',sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:6px 12px;cursor:pointer;transition:all .18s;white-space:nowrap;}
+.nav-btn:hover{border-color:var(--gold);color:var(--gold);}
+.nav-btn.gold{border-color:var(--gold);color:var(--gold);}
+.hero{padding:80px 40px 64px;border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
+.hero::after{content:'';position:absolute;top:-60%;right:-10%;width:500px;height:500px;background:radial-gradient(circle,rgba(201,169,110,.04) 0%,transparent 70%);pointer-events:none;}
+.hero-inner{max-width:960px;margin:0 auto;}
+.hero-eyebrow{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:24px;display:flex;align-items:center;gap:12px;}
+.hero-eyebrow::after{content:'';flex:1;max-width:60px;height:1px;background:var(--gold);opacity:.4;}
+h1.hero-title{font-family:'Cormorant',serif;font-size:clamp(3rem,7vw,5.5rem);font-weight:300;line-height:1.05;letter-spacing:-1px;}
+h1.hero-title em{font-style:italic;color:var(--gold);}
+.hero-sub{margin-top:20px;font-size:14px;color:var(--text-muted);font-weight:300;line-height:1.9;max-width:420px;}
+.search-wrap{background:var(--bg2);border-bottom:1px solid var(--border);padding:18px 40px;position:sticky;top:58px;z-index:100;}
+.search-inner{max-width:960px;margin:0 auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.s-field{flex:1;min-width:200px;position:relative;}
+.s-field svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--text-muted);}
+.s-field input{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:5px;padding:10px 12px 10px 36px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:300;color:var(--text);outline:none;transition:border-color .2s;}
+.s-field input::placeholder{color:var(--text-muted);}
+.s-field input:focus{border-color:var(--gold);}
+.s-sel{background:var(--bg3);border:1px solid var(--border2);border-radius:5px;color:var(--text);font-family:'Outfit',sans-serif;font-size:12px;font-weight:300;padding:10px 28px 10px 12px;outline:none;cursor:pointer;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%234a4740' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;transition:border-color .2s;min-width:140px;}
+.s-sel:focus{border-color:var(--gold);}
+.pills-wrap{padding:12px 40px;border-bottom:1px solid var(--border);background:var(--bg);}
+.pills-inner{max-width:960px;margin:0 auto;display:flex;gap:6px;flex-wrap:wrap;}
+.pill{background:none;border:1px solid var(--border2);border-radius:2px;padding:5px 14px;font-size:10px;font-weight:400;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .18s;color:var(--text-muted);font-family:'Outfit',sans-serif;}
+.pill:hover{border-color:var(--gold);color:var(--gold);}
+.pill.active{background:var(--gold-dim);border-color:var(--gold);color:var(--gold);}
+.main{max-width:960px;margin:0 auto;padding:32px 40px 100px;}
+.res-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+.res-count{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);}
+.res-count strong{color:var(--gold);}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;padding:0;}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;color:inherit;display:flex;flex-direction:column;transition:all .25s;position:relative;overflow:hidden;cursor:pointer;}
+.card:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.4);}
+.card-accent{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),transparent);transform:scaleX(0);transform-origin:left;transition:transform .3s;}
+.card:hover .card-accent{transform:scaleX(1);}
+.card-img{width:100%;aspect-ratio:3/2;object-fit:cover;display:block;background:var(--bg4);border-radius:10px 10px 0 0;}
+.card-img-placeholder{width:100%;aspect-ratio:3/2;background:var(--bg4);display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--border);border-radius:10px 10px 0 0;}
+.card-initials{font-family:'Cormorant',serif;font-size:3rem;font-weight:300;font-style:italic;color:var(--border2);}
+.card-body{padding:18px 20px;flex:1;display:flex;flex-direction:column;gap:5px;}
+.card-cat{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:400;}
+.card-name{font-family:'Cormorant',serif;font-size:1.4rem;font-weight:400;line-height:1.2;color:var(--text);margin-top:2px;}
+.card-city{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);display:flex;align-items:center;gap:4px;}
+.card-city::before{content:'';display:inline-block;width:4px;height:4px;border-radius:50%;background:var(--gold);opacity:.5;}
+.card-rating-count{font-size:10px;color:var(--text-muted);margin-left:4px;align-self:center;}
+.card-footer{margin-top:auto;padding:12px 20px;border-top:1px solid var(--border);display:flex;flex-direction:row;justify-content:space-between;align-items:center;gap:8px;}
+.card-link-btn{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:500;text-decoration:none;transition:opacity .2s;}
+.card-link-btn:hover{opacity:.7;}
+.view-btn{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);background:none;border:none;cursor:pointer;font-family:'Outfit',sans-serif;transition:color .2s;padding:0;}
+.view-btn:hover{color:var(--text);}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(8px);}
+.overlay.open{opacity:1;pointer-events:all;}
+.profile-modal{background:var(--bg2);border:1px solid var(--border2);border-radius:4px;width:100%;max-width:720px;max-height:90vh;overflow-y:auto;position:relative;transform:translateY(20px);transition:transform .25s;}
+.overlay.open .profile-modal,.overlay.open .small-modal,.overlay.open .wide-modal{transform:translateY(0);}
+.modal-close{position:absolute;top:16px;right:20px;background:none;border:none;color:var(--text-muted);font-size:22px;cursor:pointer;z-index:10;line-height:1;transition:color .2s;}
+.modal-close:hover{color:var(--text);}
+.profile-hero{position:relative;height:240px;background:linear-gradient(135deg,#0d0d11 0%,#16161c 60%,rgba(201,169,110,.08) 100%);overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.profile-hero-img{width:100%;height:100%;object-fit:cover;border-radius:10px 10px 0 0;}
+.profile-hero-placeholder{font-family:'Cormorant',serif;font-size:4rem;font-weight:300;font-style:italic;color:var(--border2);}
+.profile-avatar-wrap{display:none;}
+.profile-avatar-center{position:absolute;bottom:-52px;left:50%;transform:translateX(-50%);width:110px;height:110px;border-radius:50%;border:4px solid var(--bg2);overflow:hidden;background:var(--bg3);z-index:10;box-shadow:0 4px 24px rgba(0,0,0,.6);cursor:pointer;}
+.profile-avatar{width:100%;height:100%;object-fit:cover;}
+.profile-avatar-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:'Cormorant',serif;font-size:1.8rem;font-style:italic;color:var(--text-muted);}
+.profile-info{padding:68px 32px 24px;border-bottom:1px solid var(--border);text-align:center;}
+.profile-cat{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+.profile-name{font-family:'Cormorant',serif;font-size:2rem;font-weight:400;color:var(--text);margin-bottom:6px;}
+.profile-city{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px;}
+.profile-url-link{font-size:11px;color:var(--text-muted);text-decoration:none;border-bottom:1px solid var(--border2);padding-bottom:1px;transition:color .2s;}
+.profile-url-link:hover{color:var(--gold);}
+.profile-edit-btn{margin-top:14px;display:inline-block;background:none;border:1px solid var(--gold);border-radius:3px;color:var(--gold);font-family:'Outfit',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:6px 14px;cursor:pointer;transition:all .18s;}
+.profile-edit-btn:hover{background:var(--gold-dim);}
+.profile-stars-wrap{margin-top:14px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.profile-stars-label{font-size:11px;color:var(--text-muted);}
+.profile-avg{font-size:11px;color:var(--gold);font-weight:500;}
+.gallery-section{padding:24px 32px;}
+.section-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--text-muted);margin-bottom:14px;}
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;}
+.gallery-img{width:100%;aspect-ratio:1;object-fit:cover;background:var(--bg4);display:block;cursor:pointer;transition:opacity .2s;}
+.gallery-img:hover{opacity:.8;}
+.gallery-upload{width:100%;aspect-ratio:1;border:1px dashed var(--border2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s;background:none;color:var(--text-muted);font-size:22px;}
+.gallery-upload:hover{border-color:var(--gold);color:var(--gold);}
+.reviews-section{padding:0 32px 32px;}
+.review-form{margin-bottom:20px;}
+.review-stars-pick{display:flex;gap:4px;margin-bottom:10px;}
+.r-star{cursor:pointer;}
+.r-star path{fill:var(--border2);transition:fill .15s;}
+.r-star.sel path,.r-star:hover path{fill:var(--gold);}
+.review-input{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:4px;padding:10px 14px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:300;color:var(--text);outline:none;resize:none;transition:border-color .2s;}
+.review-input::placeholder{color:var(--text-muted);}
+.review-input:focus{border-color:var(--gold);}
+.review-submit{margin-top:8px;background:var(--gold);color:var(--bg);border:none;border-radius:3px;padding:9px 22px;font-family:'Outfit',sans-serif;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:background .2s;}
+.review-submit:hover{background:var(--gold2);}
+.review-item{padding:14px 0;border-bottom:1px solid var(--border);}
+.review-item:last-child{border-bottom:none;}
+.review-top{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.review-date{font-size:10px;color:var(--text-muted);}
+.review-text{font-size:13px;color:var(--text-mid);font-weight:300;line-height:1.7;}
+.small-modal{background:var(--bg2);border:1px solid var(--border2);border-radius:4px;width:100%;max-width:420px;padding:32px;position:relative;transform:translateY(20px);transition:transform .25s;max-height:90vh;overflow-y:auto;}
+.wide-modal{background:var(--bg2);border:1px solid var(--border2);border-radius:4px;width:100%;max-width:580px;padding:32px;position:relative;transform:translateY(20px);transition:transform .25s;max-height:88vh;overflow-y:auto;}
+.modal-title{font-family:'Cormorant',serif;font-size:1.5rem;font-weight:400;font-style:italic;color:var(--text);margin-bottom:20px;}
+.form-group{margin-bottom:14px;}
+.form-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:7px;}
+.form-input{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:4px;padding:11px 14px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:300;color:var(--text);outline:none;transition:border-color .2s;}
+.form-textarea{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:4px;padding:11px 14px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:300;color:var(--text);outline:none;resize:vertical;min-height:72px;transition:border-color .2s;}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--text-muted);}
+.form-input:focus,.form-textarea:focus{border-color:var(--gold);}
+.form-select{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:4px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;font-weight:300;padding:11px 14px;outline:none;cursor:pointer;-webkit-appearance:none;transition:border-color .2s;}
+.form-select:focus{border-color:var(--gold);}
+.form-status{font-size:12px;color:var(--text-muted);min-height:18px;margin-top:6px;}
+.form-status.ok{color:var(--gold);}
+.form-status.err{color:#c06060;}
+.form-btn{width:100%;background:var(--gold);color:var(--bg);border:none;border-radius:3px;padding:13px;font-family:'Outfit',sans-serif;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:background .2s;margin-top:8px;}
+.form-btn:hover{background:var(--gold2);}
+.form-btn:disabled{opacity:.5;cursor:not-allowed;}
+.tab-switch{font-size:11px;color:var(--text-muted);margin-top:14px;text-align:center;cursor:pointer;transition:color .2s;}
+.tab-switch:hover{color:var(--gold);}
+.divider{display:flex;align-items:center;gap:10px;margin:14px 0;color:var(--text-muted);font-size:11px;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border2);}
+.google-btn{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:3px;padding:11px;font-family:'Outfit',sans-serif;font-size:11px;font-weight:500;letter-spacing:1px;color:var(--text);cursor:pointer;transition:border-color .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.google-btn:hover{border-color:var(--gold);}
+.pending-banner{background:rgba(201,169,110,.08);border:1px solid rgba(201,169,110,.2);border-radius:4px;padding:12px 18px;font-size:12px;color:var(--gold);margin:16px 32px 0;display:none;line-height:1.6;}
+.admin-section-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.admin-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);gap:12px;}
+.admin-row-info{display:flex;flex-direction:column;gap:2px;}
+.admin-row-info strong{font-size:13px;color:var(--text);}
+.admin-row-info span{font-size:11px;color:var(--text-muted);}
+.admin-row-actions{display:flex;gap:6px;flex-shrink:0;}
+.admin-approve-btn{background:rgba(100,180,100,.12);border:1px solid rgba(100,180,100,.35);color:#7cc47c;border-radius:3px;padding:5px 10px;font-size:10px;letter-spacing:1px;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .18s;}
+.admin-approve-btn:hover{background:rgba(100,180,100,.22);}
+.admin-reject-btn{background:rgba(180,80,80,.10);border:1px solid rgba(180,80,80,.28);color:#c07070;border-radius:3px;padding:5px 10px;font-size:10px;letter-spacing:1px;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .18s;}
+.admin-reject-btn:hover{background:rgba(180,80,80,.20);}
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:700;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
+.lightbox.open{opacity:1;pointer-events:all;}
+.lightbox img{max-width:90vw;max-height:90vh;object-fit:contain;}
+.lightbox-close{position:absolute;top:20px;right:24px;background:none;border:none;color:var(--text-muted);font-size:28px;cursor:pointer;}
+.empty{background:var(--bg2);border:1px solid var(--border);padding:80px 40px;text-align:center;grid-column:1/-1;}
+.empty h3{font-family:'Cormorant',serif;font-size:1.5rem;font-weight:300;font-style:italic;color:var(--text-mid);margin-bottom:8px;}
+.empty p{font-size:13px;color:var(--text-muted);font-weight:300;}
+input[type=file]{display:none;}
+
+/* ── TABLET ── */
+@media(max-width:900px){
+  .cards-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;}
+  .main{padding:24px 24px 60px;}
+}
+
+/* ── MOBILE ── */
+@media(max-width:640px){
+  /* Nav */
+  nav{padding:0 14px;height:52px;}
+  .nav-count{display:none;}
+  .logo{font-size:1.2rem;letter-spacing:2px;}
+  .nav-actions{gap:5px;}
+  .nav-btn{padding:5px 9px;font-size:9px;}
+  .lang-btn{padding:3px 5px;font-size:9px;}
+
+  /* Hero */
+  .hero{padding:36px 16px 32px;}
+  h1.hero-title{font-size:clamp(2.2rem,10vw,3.5rem);}
+  .hero-sub{font-size:13px;}
+
+  /* Search */
+  .search-wrap{padding:12px 14px;}
+  .search-inner{gap:6px;}
+  .s-field{min-width:100%;}
+  .s-sel{min-width:calc(50% - 3px);font-size:11px;}
+
+  /* Pills */
+  .pills-wrap{padding:10px 14px;}
+  .pill{padding:4px 10px;font-size:9px;}
+
+  /* Cards */
+  .main{padding:16px 12px 60px;}
+  .cards-grid{grid-template-columns:1fr 1fr;gap:10px;}
+  .card-body{padding:12px 14px;}
+  .card-name{font-size:1.1rem;}
+  .card-footer{padding:10px 14px;}
+
+  /* Profile modal */
+  .profile-modal{border-radius:12px 12px 0 0;max-height:95vh;position:fixed;bottom:0;left:0;right:0;width:100%;max-width:100%;}
+  .overlay{align-items:flex-end;padding:0;}
+  .profile-hero{height:160px;}
+  .profile-avatar-wrap{width:64px;height:64px;bottom:-28px;left:20px;}
+  .profile-info{padding:38px 20px 18px;}
+  .profile-name{font-size:1.5rem;}
+  .gallery-section{padding:18px 20px;}
+  .reviews-section{padding:0 20px 24px;}
+  .gallery-grid{grid-template-columns:repeat(3,1fr);}
+
+  /* Modals */
+  .small-modal,.wide-modal{border-radius:12px 12px 0 0;max-height:90vh;width:100%;max-width:100%;padding:22px 18px;}
+  .overlay.open .small-modal,.overlay.open .wide-modal{transform:translateY(0);}
+
+  /* Results count */
+  #resCount{font-size:1.2rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#"><em>B</em>eauty</a>
+  <div class="nav-actions">
+    <span class="nav-count" id="navCount"></span>
+    <div class="lang-bar">
+      <button class="lang-btn active" onclick="setLang('hu')">HU</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('ro')">RO</button>
+    </div>
+    <button class="nav-btn" id="myProfileNavBtn" style="display:none;" onclick="openMyProfile()">Profilom</button>
+    <button class="nav-btn gold" id="authNavBtn">Bejelentkezés</button>
+    <button class="nav-btn" id="adminPanelBtn" style="display:none;" onclick="openAdminPanel()">Admin</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow" id="heroEyebrow">Szépség &amp; Fodrász</div>
+    <h1 class="hero-title" id="heroTitle">Fedezd fel a<br><em>legjobb fodrászokat</em></h1>
+    <p class="hero-sub" id="heroSub">Keresd meg a számodra tökéletes fodrászt — helyszín és kategória szerint szűrve, értékelésekkel.</p>
+  </div>
+</section>
+
+<!-- SEARCH -->
+<div class="search-wrap">
+  <div class="search-inner">
+    <div class="s-field">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="searchInput" placeholder="Keress névre, városra…">
+    </div>
+    <select class="s-sel" id="cityFilter">
+      <option value="" id="cityAll">Minden helyszín</option>
+    </select>
+    <input type="hidden" id="catFilter" value="">
+  </div>
+</div>
+
+<!-- PILLS -->
+<div class="pills-wrap">
+  <div class="pills-inner">
+    <button class="pill active" onclick="setPill(this,'')">Osszes</button>
+    <button class="pill" onclick="setPill(this,'Fodrász|Hairdresser|Coafor')">Fodrasz</button>
+    <button class="pill" onclick="setPill(this,'Kozmetika|Cosmetics|Cosmetică')">Kozmetika</button>
+    <button class="pill" onclick="setPill(this,'Köröm|Nails|Unghii')">Korom</button>
+    <button class="pill" onclick="setPill(this,'Smink|Makeup|Machiaj')">Smink</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="res-bar">
+    <span class="res-count"><strong id="resCount">0</strong> <span id="resLabel">talalat</span></span>
+  </div>
+  <div class="cards-grid" id="cardsGrid"></div>
+</div>
+
+<!-- PROFILE MODAL -->
+<div class="overlay" id="profileOverlay" onclick="if(event.target===this)closeProfileBtn()">
+  <div class="profile-modal">
+    <button class="modal-close" onclick="closeProfileBtn()">x</button>
+    <div class="profile-hero" style="position:relative;">
+      <img id="profileHeroImg" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" alt="">
+      <span class="profile-hero-placeholder" id="profileHeroPlaceholder" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Cormorant',serif;font-size:5rem;font-weight:300;font-style:italic;color:rgba(201,169,110,.12);"></span>
+      <div class="profile-avatar-center">
+        <div id="profileAvatarPlaceholder" class="profile-avatar-placeholder"></div>
+        <img id="profileAvatar" style="display:none;width:100%;height:100%;object-fit:cover;" alt="">
+      </div>
+    </div>
+    <div class="pending-banner" id="pendingBanner">A fiókod jóváhagyásra vár — az adminisztrátor hamarosan aktiválja.</div>
+    <div class="profile-info">
+      <div class="profile-cat" id="profileCat"></div>
+      <div class="profile-name" id="profileName"></div>
+      <div class="profile-city" id="profileCity"></div>
+      <a class="profile-url-link" id="profileUrlLink" target="_blank" rel="noopener"></a>
+      <div style="margin-top:12px;">
+        <button class="profile-edit-btn" id="profileEditBtn" style="display:none;" onclick="openEditModal()">Profil szerkesztese</button>
+      </div>
+      <div class="profile-stars-wrap">
+        <span class="profile-stars-label" id="profileStarsLabel">Ertekeles:</span>
+        <div id="profileStarsDisplay" style="display:flex;gap:2px;"></div>
+        <span class="profile-avg" id="profileAvg"></span>
+      </div>
+    </div>
+    <div class="gallery-section">
+      <div class="section-label" id="galleryLabel">Kepgaleria</div>
+      <div class="gallery-grid" id="galleryGrid"></div>
+    </div>
+    <div class="reviews-section">
+      <div class="section-label" id="reviewsLabel">Ertekelesek</div>
+      <div class="review-form">
+        <div class="review-stars-pick" id="reviewStarPick"></div>
+        <textarea class="review-input" id="reviewText" rows="3" placeholder="Irj velemenyt..."></textarea>
+        <button class="review-submit" id="reviewSubmitBtn" onclick="submitReview()">Küldés</button>
+      </div>
+      <div id="reviewsList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="overlay" id="loginOverlay" onclick="if(event.target===this)closeLoginModal()">
+  <div class="small-modal">
+    <button class="modal-close" onclick="closeLoginModal()">x</button>
+    <div class="modal-title" id="loginModalTitle">Fodrasz bejelentkezes</div>
+    <button class="google-btn" id="googleBtn" onclick="doGoogleLogin()">
+      <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Google
+    </button>
+    <div class="divider"><span id="orDividerText">vagy</span></div>
+    <div id="loginForm">
+      <div class="form-group">
+        <label class="form-label" id="loginEmailLabel">E-mail</label>
+        <input class="form-input" type="email" id="loginEmail" placeholder="te@example.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label" id="loginPassLabel">Jelszó</label>
+        <input class="form-input" type="password" id="loginPass" placeholder="........" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <div class="form-status" id="authStatus"></div>
+      <button class="form-btn" id="loginSubmitBtn" onclick="doLogin()">Belépés</button>
+      <div class="tab-switch" id="loginSwitchLink" onclick="showRegisterTab()">Még nincs fiókod? Regisztrálj</div>
+    </div>
+    <div id="registerForm" style="display:none;">
+      <div class="form-group">
+        <label class="form-label" id="regNameLabel">Teljes név</label>
+        <input class="form-input" type="text" id="regName" placeholder="Pl. Kovács Anna">
+      </div>
+      <div class="form-group">
+        <label class="form-label" id="regEmailLabel">E-mail</label>
+        <input class="form-input" type="email" id="regEmail" placeholder="te@example.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label" id="regPassLabel">Jelszó</label>
+        <input class="form-input" type="password" id="regPass" placeholder="min. 6 karakter" onkeydown="if(event.key==='Enter')doRegister()">
+      </div>
+      <div class="form-status" id="regStatus"></div>
+      <button class="form-btn" id="regSubmitBtn" onclick="doRegister()">Regisztráció</button>
+      <div class="tab-switch" id="regSwitchLink" onclick="showLoginTab()">Van már fiókod? Belépés</div>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT PROFILE MODAL -->
+<div class="overlay" id="editOverlay" onclick="if(event.target===this)closeEditBtn()">
+  <div class="small-modal">
+    <button class="modal-close" onclick="closeEditBtn()">x</button>
+    <div class="modal-title" id="editModalTitle">Profil szerkesztése</div>
+    <div class="form-group">
+      <label class="form-label" id="editNameLabel">Szalon neve</label>
+      <input class="form-input" type="text" id="editName">
+    </div>
+    <div class="form-group">
+      <label class="form-label" id="editCityLabel">Város</label>
+      <select class="form-select" id="editCity">
+        <option value="">-- Válassz várost --</option>
+        <option value="Zilah">Zilah</option>
+        <option value="Kolozsvár">Kolozsvár</option>
+        <option value="Marosvásárhely">Marosvásárhely</option>
+        <option value="Csíkszereda">Csíkszereda</option>
+        <option value="Székelyudvarhely">Székelyudvarhely</option>
+        <option value="Sepsiszentgyörgy">Sepsiszentgyörgy</option>
+        <option value="Nagyvárad">Nagyvárad</option>
+        <option value="Szatmárnémeti">Szatmárnémeti</option>
+        <option value="Brassó">Brassó</option>
+        <option value="Nagyszeben">Nagyszeben</option>
+        <option value="Déva">Déva</option>
+        <option value="Szászrégen">Szászrégen</option>
+        <option value="Dicsőszentmárton">Dicsőszentmárton</option>
+        <option value="Gyergyószentmiklós">Gyergyószentmiklós</option>
+        <option value="Kézdivásárhely">Kézdivásárhely</option>
+        <option value="Fogaras">Fogaras</option>
+        <option value="Torda">Torda</option>
+        <option value="Nagyenyed">Nagyenyed</option>
+        <option value="Gyulafehérvár">Gyulafehérvár</option>
+        <option value="Szászsebes">Szászsebes</option>
+        <option value="Medgyes">Medgyes</option>
+        <option value="Segesvár">Segesvár</option>
+        <option value="Szászváros">Szászváros</option>
+        <option value="Arad">Arad</option>
+        <option value="Temesvár">Temesvár</option>
+        <option value="Lugos">Lugos</option>
+        <option value="Szilágysomlyó">Szilágysomlyó</option>
+        <option value="Zsibó">Zsibó</option>
+        <option value="Szamosújvár">Szamosújvár</option>
+        <option value="Dés">Dés</option>
+        <option value="Beszterce">Beszterce</option>
+        <option value="Szászlekence">Szászlekence</option>
+        <option value="Érmihályfalva">Érmihályfalva</option>
+        <option value="Nagykároly">Nagykároly</option>
+        <option value="Nagybánya">Nagybánya</option>
+        <option value="Szinérváralja">Szinérváralja</option>
+        <option value="Tasnád">Tasnád</option>
+        <option value="Margitta">Margitta</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label" id="editDescLabel">Leírás</label>
+      <textarea class="form-textarea" id="editDesc" placeholder="Rovid bemutatkozas..."></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label" id="editUrlLabel">Weboldal URL</label>
+      <input class="form-input" type="url" id="editUrl" placeholder="https://...">
+    </div>
+    <div class="form-group">
+      <label class="form-label" id="editCatLabel">Kategória</label>
+      <select class="form-select" id="editCat">
+        <option value="Fodrász|Hairdresser|Coafor">Fodrasz</option>
+        <option value="Kozmetika|Cosmetics|Cosmetică">Kozmetika</option>
+        <option value="Köröm|Nails|Unghii">Korom</option>
+        <option value="Smink|Makeup|Machiaj">Smink</option>
+      </select>
+    </div>
+    <div class="form-status" id="editStatus"></div>
+    <button class="form-btn" id="editSaveBtn" onclick="saveEditProfile()">Mentés</button>
+  </div>
+</div>
+
+<!-- ADMIN PANEL MODAL -->
+<div class="overlay" id="adminPanelOverlay" onclick="if(event.target===this)closeAdminPanelBtn()">
+  <div class="wide-modal">
+    <button class="modal-close" onclick="closeAdminPanelBtn()">x</button>
+    <div class="modal-title" id="adminPanelTitle">Admin panel</div>
+    <div id="adminPanelBody"></div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">x</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<input type="file" id="avatarInput" accept="image/*" onchange="handleAvatarUpload(event)">
+<input type="file" id="galleryInput" accept="image/*" multiple onchange="handleGalleryUpload(event)">
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, onAuthStateChanged, signOut,
+         createUserWithEmailAndPassword, signInWithEmailAndPassword,
+         GoogleAuthProvider, signInWithPopup, updateProfile
+       } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, getDoc, setDoc, updateDoc,
+         collection, getDocs, addDoc, serverTimestamp, query, orderBy
+       } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+// Storage: Cloudinary used instead of Firebase Storage
+
+// ===================================================
+// FIREBASE CONFIG - csereld ki a sajat projektedre!
+// Firebase Console: https://console.firebase.google.com
+// ===================================================
+const firebaseConfig = {
+  apiKey: "AIzaSyDidTY-B8vsDTsVXRXK-I_6lyVUtLC2HUg",
+  authDomain: "fbffoglalas.firebaseapp.com",
+  projectId: "fbffoglalas",
+  storageBucket: "fbffoglalas.firebasestorage.app",
+  messagingSenderId: "1026196472595",
+  appId: "1:1026196472595:web:c9a926823b12d59c0790e6"
+};
+// superadmin email - ezt allitsd be
+const SUPERADMIN = 'fbftamas@gmail.com';
+
+const fbApp   = initializeApp(firebaseConfig);
+const auth    = getAuth(fbApp);
+const db      = getFirestore(fbApp);
+// Cloudinary config
+const CLOUDINARY_CLOUD = 'dpvb43ffe';
+const CLOUDINARY_PRESET = 'fbffoglalas';
+const gProv   = new GoogleAuthProvider();
+
+
+// --- CITY TRANSLATIONS HU <-> RO ---
+const CITY_MAP = {
+  // HU -> RO
+  'Zilah':'Zalău','Kolozsvár':'Cluj-Napoca','Marosvásárhely':'Târgu Mureș',
+  'Csíkszereda':'Miercurea Ciuc','Székelyudvarhely':'Odorheiu Secuiesc',
+  'Sepsiszentgyörgy':'Sfântu Gheorghe','Nagyvárad':'Oradea','Szatmárnémeti':'Satu Mare',
+  'Brassó':'Brașov','Nagyszeben':'Sibiu','Déva':'Deva','Szászrégen':'Reghin',
+  'Dicsőszentmárton':'Târnăveni','Gyergyószentmiklós':'Gheorgheni',
+  'Kézdivásárhely':'Târgu Secuiesc','Fogaras':'Făgăraș','Torda':'Turda',
+  'Nagyenyed':'Aiud','Gyulafehérvár':'Alba Iulia','Szászsebes':'Sebeș',
+  'Medgyes':'Mediaș','Segesvár':'Sighișoara','Szászváros':'Orăștie',
+  'Arad':'Arad','Temesvár':'Timișoara','Lugos':'Lugoj',
+  'Szilágysomlyó':'Șimleu Silvaniei','Zsibó':'Jibou','Szamosújvár':'Gherla',
+  'Dés':'Dej','Beszterce':'Bistrița','Szászlekence':'Lechința',
+  // RO -> HU (reverse)
+  'Zalău':'Zilah','Cluj-Napoca':'Kolozsvár','Târgu Mureș':'Marosvásárhely',
+  'Miercurea Ciuc':'Csíkszereda','Odorheiu Secuiesc':'Székelyudvarhely',
+  'Sfântu Gheorghe':'Sepsiszentgyörgy','Oradea':'Nagyvárad','Satu Mare':'Szatmárnémeti',
+  'Brașov':'Brassó','Sibiu':'Nagyszeben','Reghin':'Szászrégen',
+  'Târnăveni':'Dicsőszentmárton','Gheorgheni':'Gyergyószentmiklós',
+  'Târgu Secuiesc':'Kézdivásárhely','Făgăraș':'Fogaras','Turda':'Torda',
+  'Aiud':'Nagyenyed','Alba Iulia':'Gyulafehérvár','Sebeș':'Szászsebes',
+  'Mediaș':'Medgyes','Sighișoara':'Segesvár','Orăștie':'Szászváros',
+  'Timișoara':'Temesvár','Lugoj':'Lugos',
+  'Șimleu Silvaniei':'Szilágysomlyó','Jibou':'Zsibó','Gherla':'Szamosújvár',
+  'Dej':'Dés','Bistrița':'Beszterce'
+};
+
+// Hungarian city names list for detection
+const HU_CITIES = new Set(['Zilah','Kolozsvár','Marosvásárhely','Csíkszereda','Székelyudvarhely',
+  'Sepsiszentgyörgy','Nagyvárad','Szatmárnémeti','Brassó','Nagyszeben','Déva','Szászrégen',
+  'Dicsőszentmárton','Gyergyószentmiklós','Kézdivásárhely','Fogaras','Torda','Nagyenyed',
+  'Gyulafehérvár','Szászsebes','Medgyes','Segesvár','Szászváros','Arad','Temesvár','Lugos',
+  'Szilágysomlyó','Zsibó','Szamosújvár','Dés','Beszterce','Nagykároly','Nagybánya',
+  'Érmihályfalva','Tasnád','Margitta']);
+
+function translateCity(city, targetLang){
+  if(!city) return city;
+  const isHU = HU_CITIES.has(city);
+  if(targetLang==='hu'){
+    // If stored as RO, translate to HU
+    if(!isHU && CITY_MAP[city]) return CITY_MAP[city];
+    return city;
+  }
+  if(targetLang==='ro' || targetLang==='en'){
+    // If stored as HU, translate to RO
+    if(isHU && CITY_MAP[city]) return CITY_MAP[city];
+    return city;
+  }
+  return city;
+}
+
+// --- STATE ---
+let currentUser    = null;
+let currentProfile = null;
+let apps           = [];
+let lang           = 'hu';
+let currentAppId   = null;
+let currentReviewStars = 0;
+
+// --- TRANSLATIONS ---
+const T = {
+  hu:{
+    heroEyebrow:'Szépség & Fodrász',
+    heroTitle:'Fedezd fel a<br><em>legjobb fodrászokat</em>',
+    heroSub:'Keresd meg a számodra tökéletes fodrászt — helyszín és kategória szerint szűrve, értékelésekkel.',
+    searchPlaceholder:'Keress névre, városra, leírásra…',
+    cityAll:'Minden helyszín', catAll:'Minden kategória',
+    resLabel:'találat', navCount:n=>n+' profil',
+    loginBtn:'Bejelentkezés', logoutBtn:'Kilépés', myProfileBtn:'Profilom',
+    loginTitle:'Fodrász bejelentkezés', registerTitle:'Regisztráció',
+    switchToReg:'Még nincs fiókod? Regisztrálj', switchToLogin:'Van már fiókod? Belépés',
+    nameLabel:'Teljes név', emailLabel:'E-mail', passLabel:'Jelszó',
+    loginSubmit:'Belépés', regSubmit:'Regisztráció', googleBtn:'Belépés Google-lel',
+    pendingMsg:'A fiókod jóváhagyásra vár. Az adminisztrátor hamarosan aktiválja.',
+    editTitle:'Profil szerkesztése', editNameL:'Szalon neve', editCityL:'Város',
+    editDescL:'Leírás', editUrlL:'Weboldal URL', editCatL:'Kategória',
+    editSave:'Mentés', editSaved:'Mentve!', editErr:'Hiba, próbáld újra.',
+    uploadAvatarHint:'Kattints a profilkép feltöltéséhez',
+    galleryLabel:'Képgaléria', reviewsLabel:'Értékelések',
+    reviewPlaceholder:'Írj véleményt…', reviewSubmit:'Küldés',
+    ratingLabel:'Értékelés:', visitSite:'Weboldal', viewProfile:'Profil',
+    noResults:'Nincs találat', noResultsSub:'Próbálj más szűrési feltételt.',
+    addedOk:(n,c)=>'"'+n+'" hozzáadva — '+c,
+    addErr:'Hiba. Próbáld újra.', analyzing:'Az AI elemzi az oldalt…',
+    invalidUrl:'Érvényes URL-t adj meg!', alreadyExists:'Ez az URL már szerepel.',
+    approveBtn:'Jóváhagyás', rejectBtn:'Elutasítás', banBtn:'Letiltás',
+    pendingSection:'Jóváhagyásra vár', activeSection:'Aktív profilok',
+    noPending:'Nincs függőben lévő.',
+    addHairdresserTitle:'Fodrász hozzáadása', addBtn:'Hozzáadás & Elemzés',
+    adminPanel:'Admin panel', profileEdit:'Profil szerkesztése',
+    orDivider:'vagy',
+    catNames:{
+      'Fodrász|Hairdresser|Coafor':'Fodrász',
+      'Kozmetika|Cosmetics|Cosmetică':'Kozmetika',
+      'Köröm|Nails|Unghii':'Köröm',
+      'Smink|Makeup|Machiaj':'Smink'
+    }
+  },
+  en:{
+    heroEyebrow:'Beauty & Hair',
+    heroTitle:'Discover the<br><em>best hairdressers</em>',
+    heroSub:'Find your perfect hairdresser — filtered by location and category, with reviews.',
+    searchPlaceholder:'Search by name, city, description…',
+    cityAll:'All locations', catAll:'All categories',
+    resLabel:'results', navCount:n=>n+' profiles',
+    loginBtn:'Sign in', logoutBtn:'Sign out', myProfileBtn:'My profile',
+    loginTitle:'Hairdresser sign in', registerTitle:'Register',
+    switchToReg:"Don't have an account? Register", switchToLogin:'Already have an account? Sign in',
+    nameLabel:'Full name', emailLabel:'Email', passLabel:'Password',
+    loginSubmit:'Sign in', regSubmit:'Register', googleBtn:'Sign in with Google',
+    pendingMsg:'Your account is awaiting approval. The admin will activate it shortly.',
+    editTitle:'Edit profile', editNameL:'Salon name', editCityL:'City',
+    editDescL:'Description', editUrlL:'Website URL', editCatL:'Category',
+    editSave:'Save', editSaved:'Saved!', editErr:'Error, please try again.',
+    uploadAvatarHint:'Click to upload profile photo',
+    galleryLabel:'Gallery', reviewsLabel:'Reviews',
+    reviewPlaceholder:'Write a review…', reviewSubmit:'Submit',
+    ratingLabel:'Rating:', visitSite:'Website', viewProfile:'Profile',
+    noResults:'No results', noResultsSub:'Try different filters.',
+    addedOk:(n,c)=>'"'+n+'" added — '+c,
+    addErr:'Error. Try again.', analyzing:'AI is analyzing the page…',
+    invalidUrl:'Enter a valid URL!', alreadyExists:'This URL already exists.',
+    approveBtn:'Approve', rejectBtn:'Reject', banBtn:'Ban',
+    pendingSection:'Awaiting approval', activeSection:'Active profiles',
+    noPending:'No pending accounts.',
+    addHairdresserTitle:'Add hairdresser', addBtn:'Add & Analyze',
+    adminPanel:'Admin panel', profileEdit:'Edit profile',
+    orDivider:'or',
+    catNames:{
+      'Fodrász|Hairdresser|Coafor':'Hairdresser',
+      'Kozmetika|Cosmetics|Cosmetică':'Cosmetics',
+      'Köröm|Nails|Unghii':'Nails',
+      'Smink|Makeup|Machiaj':'Makeup'
+    }
+  },
+  ro:{
+    heroEyebrow:'Frumusețe & Coafură',
+    heroTitle:'Descoperă cei mai buni<br><em>coafori</em>',
+    heroSub:'Găsește coaforul perfect — filtrat după locație și categorie, cu recenzii.',
+    searchPlaceholder:'Caută după nume, oraș, descriere…',
+    cityAll:'Toate locațiile', catAll:'Toate categoriile',
+    resLabel:'rezultate', navCount:n=>n+' profiluri',
+    loginBtn:'Conectare', logoutBtn:'Deconectare', myProfileBtn:'Profilul meu',
+    loginTitle:'Conectare coafor', registerTitle:'Înregistrare',
+    switchToReg:'Nu ai cont? Înregistrează-te', switchToLogin:'Ai deja cont? Conectează-te',
+    nameLabel:'Nume complet', emailLabel:'E-mail', passLabel:'Parolă',
+    loginSubmit:'Conectare', regSubmit:'Înregistrare', googleBtn:'Conectare cu Google',
+    pendingMsg:'Contul tău așteaptă aprobare. Administratorul îl va activa în curând.',
+    editTitle:'Editează profilul', editNameL:'Numele salonului', editCityL:'Oraș',
+    editDescL:'Descriere', editUrlL:'URL site web', editCatL:'Categorie',
+    editSave:'Salvează', editSaved:'Salvat!', editErr:'Eroare, încearcă din nou.',
+    uploadAvatarHint:'Click pentru a încărca fotografia de profil',
+    galleryLabel:'Galerie foto', reviewsLabel:'Recenzii',
+    reviewPlaceholder:'Scrie o recenzie…', reviewSubmit:'Trimite',
+    ratingLabel:'Evaluare:', visitSite:'Site web', viewProfile:'Profil',
+    noResults:'Niciun rezultat', noResultsSub:'Încearcă alți filteri.',
+    addedOk:(n,c)=>'"'+n+'" adăugat — '+c,
+    addErr:'Eroare. Încearcă din nou.', analyzing:'AI analizează pagina…',
+    invalidUrl:'Introdu un URL valid!', alreadyExists:'Acest URL există deja.',
+    approveBtn:'Aprobă', rejectBtn:'Respinge', banBtn:'Blochează',
+    pendingSection:'Așteaptă aprobare', activeSection:'Profiluri active',
+    noPending:'Nu există conturi în așteptare.',
+    addHairdresserTitle:'Adaugă coafor', addBtn:'Adaugă & Analizează',
+    adminPanel:'Panou admin', profileEdit:'Editează profilul',
+    orDivider:'sau',
+    catNames:{
+      'Fodrász|Hairdresser|Coafor':'Coafor',
+      'Kozmetika|Cosmetics|Cosmetică':'Cosmetică',
+      'Köröm|Nails|Unghii':'Unghii',
+      'Smink|Makeup|Machiaj':'Machiaj'
+    }
+  }
+};
+
+function t(k,...a){const v=T[lang][k];return typeof v==='function'?v(...a):(v||k);}
+
+// expose to global
+window.setLang = function(l){
+  lang=l;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent.toLowerCase()===l));
+  applyLang(); renderCards();
+};
+
+
+// --- CLOUDINARY UPLOAD ---
+async function uploadToCloudinary(file){
+  const fd = new FormData();
+  fd.append('file', file);
+  fd.append('upload_preset', CLOUDINARY_PRESET);
+  const res = await fetch('https://api.cloudinary.com/v1_1/'+CLOUDINARY_CLOUD+'/image/upload', {method:'POST', body:fd});
+  const data = await res.json();
+  if(!data.secure_url) throw new Error('Cloudinary upload failed');
+  return data.secure_url;
+}
+
+// --- AUTH ---
+onAuthStateChanged(auth, async user=>{
+  currentUser=user;
+  if(user){
+    const snap=await getDoc(doc(db,'hairdressers',user.uid));
+    currentProfile=snap.exists()?snap.data():null;
+  } else { currentProfile=null; }
+  updateNavAuth();
+  renderCards();
+});
+
+function updateNavAuth(){
+  const authBtn=document.getElementById('authNavBtn');
+  const myBtn=document.getElementById('myProfileNavBtn');
+  const adminBtn=document.getElementById('adminPanelBtn');
+  if(currentUser){
+    authBtn.textContent=t('logoutBtn');
+    authBtn.onclick=()=>signOut(auth);
+    myBtn.style.display='inline-block';
+    myBtn.textContent=t('myProfileBtn');
+    adminBtn.style.display=currentUser.email===SUPERADMIN?'inline-block':'none';
+  } else {
+    authBtn.textContent=t('loginBtn');
+    authBtn.onclick=openLoginModal;
+    myBtn.style.display='none';
+    adminBtn.style.display='none';
+  }
+}
+
+// --- FIRESTORE LOAD ---
+async function loadApps(){
+  try{
+    const q=query(collection(db,'hairdressers'),orderBy('createdAt','desc'));
+    const snap=await getDocs(q);
+    apps=snap.docs.map(d=>({id:d.id,...d.data()}));
+    console.log('APPS LOADED:', apps.length, apps.map(a=>a.name+' | '+a.status+' | '+a.city));
+  } catch(e){ 
+    console.error('FIRESTORE ERROR:', e);
+    apps=[]; 
+  }
+  buildCityFilter();
+  renderCards();
+}
+
+// --- LOGIN MODAL ---
+function openLoginModal(){
+  document.getElementById('loginOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  showLoginTab();
+}
+window.openLoginModal=openLoginModal;
+
+window.closeLoginModal=function(){
+  document.getElementById('loginOverlay').classList.remove('open');
+  document.body.style.overflow='';
+  document.getElementById('authStatus').textContent='';
+};
+
+window.showLoginTab=function(){
+  document.getElementById('loginForm').style.display='block';
+  document.getElementById('registerForm').style.display='none';
+  document.getElementById('loginModalTitle').textContent=t('loginTitle');
+  document.getElementById('authStatus').textContent='';
+  document.getElementById('regStatus').textContent='';
+};
+window.showRegisterTab=function(){
+  document.getElementById('loginForm').style.display='none';
+  document.getElementById('registerForm').style.display='block';
+  document.getElementById('loginModalTitle').textContent=t('registerTitle');
+  document.getElementById('authStatus').textContent='';
+  document.getElementById('regStatus').textContent='';
+};
+
+window.doLogin=async function(){
+  const email=document.getElementById('loginEmail').value.trim();
+  const pass=document.getElementById('loginPass').value;
+  const st=document.getElementById('authStatus');
+  st.className='form-status'; st.textContent='...';
+  try{
+    await signInWithEmailAndPassword(auth,email,pass);
+    window.closeLoginModal();
+  } catch(e){ st.className='form-status err'; st.textContent=e.message; }
+};
+
+window.doRegister=async function(){
+  const email=document.getElementById('regEmail').value.trim();
+  const pass=document.getElementById('regPass').value;
+  const name=document.getElementById('regName').value.trim();
+  const st=document.getElementById('regStatus');
+  if(!name){st.className='form-status err';st.textContent='Add meg a neved!';return;}
+  st.className='form-status'; st.textContent='...';
+  try{
+    const cred=await createUserWithEmailAndPassword(auth,email,pass);
+    await updateProfile(cred.user,{displayName:name});
+    await setDoc(doc(db,'hairdressers',cred.user.uid),{
+      uid:cred.user.uid, name, email,
+      category:'Fodrász|Hairdresser|Coafor',
+      city:'', desc:'', url:'',
+      avatar:null, gallery:[], reviews:[],
+      status:'pending', createdAt:serverTimestamp()
+    });
+    window.closeLoginModal();
+    alert(t('pendingMsg'));
+  } catch(e){ st.className='form-status err'; st.textContent=e.message; }
+};
+
+window.doGoogleLogin=async function(){
+  const st=document.getElementById('authStatus');
+  try{
+    const result=await signInWithPopup(auth,gProv);
+    const user=result.user;
+    const snap=await getDoc(doc(db,'hairdressers',user.uid));
+    if(!snap.exists()){
+      await setDoc(doc(db,'hairdressers',user.uid),{
+        uid:user.uid, name:user.displayName||user.email, email:user.email,
+        category:'Fodrász|Hairdresser|Coafor',
+        city:'', desc:'', url:'',
+        avatar:user.photoURL||null, gallery:[], reviews:[],
+        status:'pending', createdAt:serverTimestamp()
+      });
+      alert(t('pendingMsg'));
+    }
+    window.closeLoginModal();
+  } catch(e){ st.className='form-status err'; st.textContent=e.message; }
+};
+
+// --- MY PROFILE ---
+window.openMyProfile=function(){
+  if(currentUser) openProfile(currentUser.uid);
+};
+
+// --- EDIT MODAL ---
+window.openEditModal=function(){
+  if(!currentUser||!currentProfile)return;
+  const p=currentProfile;
+  document.getElementById('editName').value=p.name||'';
+  document.getElementById('editCity').value=p.city||'';
+  document.getElementById('editDesc').value=p.desc||'';
+  document.getElementById('editUrl').value=p.url||'';
+  document.getElementById('editCat').value=p.category||'Fodrász|Hairdresser|Coafor';
+  document.getElementById('editStatus').textContent='';
+  document.getElementById('editOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+};
+window.closeEditBtn=function(){
+  document.getElementById('editOverlay').classList.remove('open');
+  document.body.style.overflow='';
+};
+window.saveEditProfile=async function(){
+  const st=document.getElementById('editStatus');
+  st.className='form-status'; st.textContent='...';
+  const data={
+    name:document.getElementById('editName').value.trim(),
+    city:document.getElementById('editCity').value.trim(),
+    desc:document.getElementById('editDesc').value.trim(),
+    url:document.getElementById('editUrl').value.trim(),
+    category:document.getElementById('editCat').value,
+  };
+  try{
+    await updateDoc(doc(db,'hairdressers',currentUser.uid),data);
+    Object.assign(currentProfile,data);
+    const idx=apps.findIndex(a=>a.id===currentUser.uid);
+    if(idx>=0)Object.assign(apps[idx],data);
+    st.className='form-status ok'; st.textContent=t('editSaved');
+    buildCityFilter(); renderCards();
+    setTimeout(()=>{ window.closeEditBtn(); openProfile(currentUser.uid); },800);
+  } catch(e){ st.className='form-status err'; st.textContent=t('editErr'); }
+};
+
+// --- AVATAR UPLOAD ---
+window.handleAvatarUpload=async function(e){
+  const file=e.target.files[0]; if(!file||!currentUser)return;
+  openCropModal(file);
+  e.target.value='';
+};
+
+// --- GALLERY UPLOAD ---
+window.handleGalleryUpload=async function(e){
+  const files=[...e.target.files]; if(!files.length||!currentUser)return;
+  const a=apps.find(x=>x.id===currentUser.uid); if(!a)return;
+  if(!a.gallery)a.gallery=[];
+  for(const file of files){
+    try{
+      const url=await uploadToCloudinary(file);
+      a.gallery.push(url);
+      if(currentProfile)currentProfile.gallery=[...a.gallery];
+      await updateDoc(doc(db,'hairdressers',currentUser.uid),{gallery:a.gallery});
+    } catch(err){console.error(err);}
+  }
+  renderGallery(a,true);
+  e.target.value='';
+};
+
+// --- ADMIN PANEL ---
+window.openAdminPanel=async function(){
+  if(!currentUser||currentUser.email!==SUPERADMIN)return;
+  await renderAdminPanel();
+  document.getElementById('adminPanelOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+};
+window.closeAdminPanelBtn=function(){
+  document.getElementById('adminPanelOverlay').classList.remove('open');
+  document.body.style.overflow='';
+};
+
+async function renderAdminPanel(){
+  const snap=await getDocs(collection(db,'hairdressers'));
+  const all=snap.docs.map(d=>({id:d.id,...d.data()}));
+  const pending=all.filter(a=>a.status==='pending');
+  const approved=all.filter(a=>a.status==='approved');
+
+  let html='<div class="admin-section-label">'+t('pendingSection')+' ('+pending.length+')</div>';
+  if(!pending.length) html+='<p style="color:var(--text-muted);font-size:13px;margin-bottom:16px;">'+t('noPending')+'</p>';
+  pending.forEach(p=>{
+    html+='<div class="admin-row"><div class="admin-row-info"><strong>'+p.name+'</strong><span>'+p.email+'</span></div>'
+      +'<div class="admin-row-actions">'
+      +'<button class="admin-approve-btn" onclick="approveUser(\''+p.id+'\')">&#10003; '+t('approveBtn')+'</button>'
+      +'<button class="admin-reject-btn" onclick="rejectUser(\''+p.id+'\')">&#10007; '+t('rejectBtn')+'</button>'
+      +'</div></div>';
+  });
+  html+='<div class="admin-section-label" style="margin-top:20px;">'+t('activeSection')+' ('+approved.length+')</div>';
+  approved.forEach(p=>{
+    html+='<div class="admin-row"><div class="admin-row-info"><strong>'+p.name+'</strong><span>'+(p.city||'-')+' &middot; '+p.email+'</span></div>'
+      +'<div class="admin-row-actions"><button class="admin-reject-btn" onclick="rejectUser(\''+p.id+'\')">Letiltas</button></div></div>';
+  });
+  html+='<div class="admin-section-label" style="margin-top:24px;">'+t('addHairdresserTitle')+'</div>'
+    +'<div class="form-group"><label class="form-label">Weboldal URL</label>'
+    +'<input class="form-input" type="url" id="adminUrl" placeholder="https://example.com"></div>'
+    +'<div class="form-group"><label class="form-label">Kategoria</label>'
+    +'<select class="form-select" id="adminCat">'
+    +'<option value="Fodrász|Hairdresser|Coafor">Fodrasz</option>'
+    +'<option value="Kozmetika|Cosmetics|Cosmetică">Kozmetika</option>'
+    +'<option value="Köröm|Nails|Unghii">Korom</option>'
+    +'<option value="Smink|Makeup|Machiaj">Smink</option></select></div>'
+    +'<div class="form-status" id="adminAddStatus"></div>'
+    +'<button class="form-btn" onclick="adminAddHairdresser()">'+t('addBtn')+'</button>';
+  document.getElementById('adminPanelBody').innerHTML=html;
+}
+
+window.approveUser=async function(uid){
+  await updateDoc(doc(db,'hairdressers',uid),{status:'approved'});
+  const idx=apps.findIndex(a=>a.id===uid); if(idx>=0)apps[idx].status='approved';
+  renderAdminPanel(); renderCards();
+};
+window.rejectUser=async function(uid){
+  await updateDoc(doc(db,'hairdressers',uid),{status:'rejected'});
+  const idx=apps.findIndex(a=>a.id===uid); if(idx>=0)apps[idx].status='rejected';
+  renderAdminPanel(); renderCards();
+};
+window.adminAddHairdresser=async function(){
+  const url=document.getElementById('adminUrl').value.trim();
+  const cat=document.getElementById('adminCat').value;
+  const st=document.getElementById('adminAddStatus');
+  if(!url||!url.startsWith('http')){st.className='form-status err';st.textContent=t('invalidUrl');return;}
+  st.className='form-status'; st.textContent=t('analyzing');
+  try{
+    let pageText='';
+    try{
+      const r=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent(url),{signal:AbortSignal.timeout(8000)});
+      const j=await r.json(); const tmp=document.createElement('div'); tmp.innerHTML=j.contents||'';
+      pageText=(tmp.innerText||'').replace(/\s+/g,' ').slice(0,2000);
+    }catch(e){}
+    const prompt='URL: '+url+'\nOldal: '+pageText+'\nAdj vissza CSAK JSON-t: {"name":"...","city":"Varos magyarul (pl. Zalau, Budapest) vagy Online","desc":"1-2 mondatos leiras magyarul"}';
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:300,messages:[{role:'user',content:prompt}]})});
+    const data=await resp.json();
+    const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
+    const info=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    const newDoc={uid:'admin_'+Date.now(),url,name:info.name||url,category:cat,city:info.city||'Online',desc:info.desc||'',avatar:null,gallery:[],reviews:[],status:'approved',createdAt:serverTimestamp()};
+    const docRef=await addDoc(collection(db,'hairdressers'),newDoc);
+    apps.unshift({id:docRef.id,...newDoc});
+    buildCityFilter(); renderCards();
+    st.className='form-status ok'; st.textContent=t('addedOk',newDoc.name,newDoc.city);
+    document.getElementById('adminUrl').value='';
+  } catch(e){ st.className='form-status err'; st.textContent=t('addErr'); }
+};
+
+// --- CITY FILTER ---
+function buildCityFilter(){
+  const visible=apps.filter(a=>a.status==='approved');
+  const cities=[...new Set(visible.map(a=>a.city).filter(Boolean))].sort();
+  const sel=document.getElementById('cityFilter'); const cur=sel.value;
+  sel.innerHTML='<option value="">'+t('cityAll')+'</option>';
+  cities.forEach(c=>{
+    const o=document.createElement('option');
+    o.value=c;
+    o.textContent=translateCity(c,lang);
+    if(c===cur)o.selected=true;
+    sel.appendChild(o);
+  });
+}
+
+// --- STARS ---
+function avgRating(app){
+  if(!app.reviews||!app.reviews.length)return 0;
+  return app.reviews.reduce((s,r)=>s+r.stars,0)/app.reviews.length;
+}
+function starsSVG(filled,size=12){
+  return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="'+(filled?'var(--gold)':'var(--text-muted)')+'"/></svg>';
+}
+function renderStarsHtml(avg,total,size){
+  let h=''; for(let i=1;i<=total;i++)h+=starsSVG(i<=Math.round(avg),size); return h;
+}
+
+// --- RENDER CARDS ---
+window.setPill=function(el,val){
+  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('catFilter').value=val;
+  renderCards();
+};
+
+function renderCards(){
+  const q=(document.getElementById('searchInput').value||'').toLowerCase().trim();
+  const city=document.getElementById('cityFilter').value;
+  const cat=document.getElementById('catFilter').value;
+  const visible=apps.filter(a=>a.status==='approved');
+  const filtered=visible.filter(a=>{
+    const translatedCity=translateCity(a.city,'hu')+' '+translateCity(a.city,'ro');
+    const s=(a.name+' '+a.city+' '+translatedCity+' '+a.desc).toLowerCase();
+    const cityMatch=!city||(a.city===city||translateCity(a.city,lang)===city);
+    return(!q||s.includes(q))&&cityMatch&&(!cat||a.category===cat);
+  });
+  document.getElementById('resCount').textContent=filtered.length;
+  document.getElementById('resLabel').textContent=t('resLabel');
+  document.getElementById('navCount').textContent=t('navCount',visible.length);
+  const grid=document.getElementById('cardsGrid');
+  if(!filtered.length){
+    grid.innerHTML='<div class="empty"><h3>'+t('noResults')+'</h3><p>'+t('noResultsSub')+'</p></div>';
+    return;
+  }
+  const catN=t('catNames');
+  grid.innerHTML=filtered.map(a=>{
+    const avg=avgRating(a);
+    const cn=catN[a.category]||a.category;
+    const isOwn=currentUser&&currentUser.uid===a.id;
+    const img=a.avatar?'<img class="card-img" src="'+a.avatar+'" alt="'+a.name+'">'
+      :'<div class="card-img-placeholder"><span class="card-initials">'+initials(a.name)+'</span></div>';
+    return '<div class="card" onclick="openProfile(\''+a.id+'\')">'
+      +'<div class="card-accent"></div>'+img
+      +'<div class="card-body">'
+      +'<div class="card-cat">'+cn+(isOwn?' <span style="color:var(--gold)">&#9998;</span>':'')+'</div>'
+      +'<div class="card-name">'+a.name+'</div>'
+      +'<div class="card-city">'+translateCity(a.city,lang)+'</div>'
+      +'<div style="display:flex;align-items:center;gap:2px;margin-top:4px;">'+renderStarsHtml(avg,5,12)+'<span class="card-rating-count">('+((a.reviews||[]).length)+')</span></div>'
+      +'<div class="card-footer">'
+      +'<button class="view-btn" onclick="event.stopPropagation();openProfile(\''+a.id+'\')">'+t('viewProfile')+'</button>'
+      +(a.url?'<a class="card-link-btn" href="'+a.url+'" target="_blank" rel="noopener" onclick="event.stopPropagation()">'+t('visitSite')+'</a>':'')
+      +'</div></div></div>';
+  }).join('');
+}
+
+function initials(n){return(n||'?').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();}
+
+// --- PROFILE MODAL ---
+window.openProfile=function(id){
+  currentAppId=id;
+  const a=apps.find(x=>x.id===id); if(!a)return;
+  const isOwn=currentUser&&currentUser.uid===id;
+  const avg=avgRating(a);
+  const catN=t('catNames');
+
+  document.getElementById('profileCat').textContent=catN[a.category]||a.category;
+  document.getElementById('profileName').textContent=a.name;
+  document.getElementById('profileCity').textContent=translateCity(a.city,lang)||'';
+  const ul=document.getElementById('profileUrlLink');
+  ul.href=a.url||'#'; ul.textContent=(a.url||'').replace(/^https?:\/\//,''); ul.style.display=a.url?'':'none';
+  document.getElementById('profileEditBtn').style.display=isOwn?'inline-block':'none';
+
+  // pending banner
+  const banner=document.getElementById('pendingBanner');
+  banner.style.display=(isOwn&&a.status==='pending')?'block':'none';
+
+  // avatar
+  const avImg=document.getElementById('profileAvatar');
+  const avPh=document.getElementById('profileAvatarPlaceholder');
+  if(a.avatar){avImg.src=a.avatar;avImg.style.display='block';avPh.style.display='none';}
+  else{avImg.style.display='none';avPh.style.display='flex';avPh.textContent=initials(a.name);}
+  const avClick=isOwn?()=>document.getElementById('avatarInput').click():null;
+  const avCenter=document.querySelector('.profile-avatar-center');
+  if(avCenter){ avCenter.onclick=avClick; avCenter.style.cursor=isOwn?'pointer':'default'; avCenter.title=isOwn?'Kattints a profilkép feltöltéséhez':''; }
+  avImg.onclick=avClick;
+  avPh.onclick=avClick;
+
+  // hero - show gallery[0] or avatar as background, fallback to gradient with initials
+  const hImg=document.getElementById('profileHeroImg');
+  const hPh=document.getElementById('profileHeroPlaceholder');
+  const hSrc=(a.gallery&&a.gallery[0])||null;
+  if(hSrc){
+    hImg.src=hSrc; hImg.style.display='block'; hPh.style.display='none';
+  } else {
+    hImg.style.display='none';
+    hPh.style.display='flex';
+    hPh.textContent=initials(a.name);
+  }
+
+  document.getElementById('profileStarsLabel').textContent=t('ratingLabel');
+  document.getElementById('profileStarsDisplay').innerHTML=renderStarsHtml(avg,5,14);
+  document.getElementById('profileAvg').textContent=avg>0?avg.toFixed(1):'';
+  document.getElementById('galleryLabel').textContent=t('galleryLabel');
+  renderGallery(a,isOwn);
+  document.getElementById('reviewsLabel').textContent=t('reviewsLabel');
+  document.getElementById('reviewText').placeholder=t('reviewPlaceholder');
+  document.getElementById('reviewSubmitBtn').textContent=t('reviewSubmit');
+  currentReviewStars=0; renderReviewStarPick(); renderReviews(a);
+  document.getElementById('profileOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+};
+window.closeProfileBtn=function(){
+  document.getElementById('profileOverlay').classList.remove('open');
+  document.body.style.overflow='';
+};
+
+// --- GALLERY ---
+function renderGallery(a,isOwn){
+  const g=document.getElementById('galleryGrid');
+  g.innerHTML='';
+  (a.gallery||[]).forEach((src,i)=>{
+    if(isOwn){
+      const wrap=document.createElement('div');
+      wrap.style.cssText='position:relative;aspect-ratio:1;';
+      const img=document.createElement('img');
+      img.className='gallery-img';
+      img.src=src; img.alt='';
+      img.style.cssText='width:100%;height:100%;object-fit:cover;display:block;cursor:pointer;';
+      img.addEventListener('click',()=>openLightbox(src));
+      const btn=document.createElement('button');
+      btn.innerHTML='&times;';
+      btn.style.cssText='position:absolute;top:4px;right:4px;background:rgba(0,0,0,.75);border:none;color:#fff;border-radius:50%;width:22px;height:22px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;';
+      btn.addEventListener('click',()=>deleteGalleryImg(a.id,i));
+      wrap.appendChild(img); wrap.appendChild(btn); g.appendChild(wrap);
+    } else {
+      const img=document.createElement('img');
+      img.className='gallery-img'; img.src=src; img.alt='';
+      img.addEventListener('click',()=>openLightbox(src));
+      g.appendChild(img);
+    }
+  });
+  if(isOwn){
+    const btn=document.createElement('button');
+    btn.className='gallery-upload'; btn.textContent='+';
+    btn.addEventListener('click',()=>document.getElementById('galleryInput').click());
+    g.appendChild(btn);
+  }
+}
+
+window.deleteGalleryImg=async function(appId,idx){
+  if(!currentUser||currentUser.uid!==appId)return;
+  const a=apps.find(x=>x.id===appId); if(!a||!a.gallery)return;
+  a.gallery.splice(idx,1);
+  if(currentProfile)currentProfile.gallery=[...a.gallery];
+  try{
+    await updateDoc(doc(db,'hairdressers',appId),{gallery:a.gallery});
+    renderGallery(a,true);
+    const hImg=document.getElementById('profileHeroImg');
+    const hPh=document.getElementById('profileHeroPlaceholder');
+    const hSrc=(a.gallery&&a.gallery[0])||null;
+    if(hSrc){hImg.src=hSrc;hImg.style.display='block';hPh.style.display='none';}
+    else{hImg.style.display='none';hPh.style.display='flex';hPh.textContent=initials(a.name);}
+    renderCards();
+  }catch(e){console.error(e);}
+};
+
+window.openLightbox=function(src){document.getElementById('lightboxImg').src=src;document.getElementById('lightbox').classList.add('open');};
+window.closeLightbox=function(){document.getElementById('lightbox').classList.remove('open');};
+
+// --- REVIEWS ---
+function renderReviewStarPick(){
+  const w=document.getElementById('reviewStarPick'); w.innerHTML='';
+  for(let i=1;i<=5;i++){
+    const s=document.createElementNS('http://www.w3.org/2000/svg','svg');
+    s.setAttribute('width','20');s.setAttribute('height','20');s.setAttribute('viewBox','0 0 24 24');s.classList.add('r-star');
+    if(i<=currentReviewStars)s.classList.add('sel');
+    const p=document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d','M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z');
+    s.appendChild(p); const star=i; s.onclick=()=>{currentReviewStars=star;renderReviewStarPick();};
+    w.appendChild(s);
+  }
+}
+window.submitReview=async function(){
+  if(!currentReviewStars){alert('Adj meg csillag ertekeleest!');return;}
+  const text=document.getElementById('reviewText').value.trim(); if(!text)return;
+  const a=apps.find(x=>x.id===currentAppId); if(!a)return;
+  if(!a.reviews)a.reviews=[];
+  const rev={stars:currentReviewStars,text,date:new Date().toLocaleDateString(lang==='ro'?'ro-RO':lang==='en'?'en-GB':'hu-HU')};
+  a.reviews.unshift(rev);
+  try{await updateDoc(doc(db,'hairdressers',currentAppId),{reviews:a.reviews});}catch(e){}
+  document.getElementById('reviewText').value=''; currentReviewStars=0;
+  renderReviewStarPick(); renderReviews(a);
+  const avg=avgRating(a);
+  document.getElementById('profileStarsDisplay').innerHTML=renderStarsHtml(avg,5,14);
+  document.getElementById('profileAvg').textContent=avg>0?avg.toFixed(1):'';
+  renderCards();
+};
+function renderReviews(a){
+  const l=document.getElementById('reviewsList');
+  if(!a.reviews||!a.reviews.length){l.innerHTML='';return;}
+  l.innerHTML=a.reviews.map(r=>'<div class="review-item"><div class="review-top">'+renderStarsHtml(r.stars,5,12)+'<span class="review-date">'+r.date+'</span></div><div class="review-text">'+r.text+'</div></div>').join('');
+}
+
+// --- LANG APPLY ---
+function el(id){return document.getElementById(id);}
+function setText(id,val){const e=el(id);if(e&&val!==undefined)e.textContent=val;}
+function setHTML(id,val){const e=el(id);if(e&&val!==undefined)e.innerHTML=val;}
+function setPlaceholder(id,val){const e=el(id);if(e&&val!==undefined)e.placeholder=val;}
+
+function applyLang(){
+  const tl=T[lang];
+  // hero
+  setText('heroEyebrow',tl.heroEyebrow);
+  setHTML('heroTitle',tl.heroTitle);
+  setText('heroSub',tl.heroSub);
+  // search
+  setPlaceholder('searchInput',tl.searchPlaceholder);
+  setText('cityAll',tl.cityAll);
+  setText('catAll',tl.catAll);
+  // pills — set text by index
+  const pills=document.querySelectorAll('.pill');
+  const allLabel=lang==='en'?'All':lang==='ro'?'Toate':'Összes';
+  const pillVals=['',
+    'Fodrász|Hairdresser|Coafor',
+    'Kozmetika|Cosmetics|Cosmetică',
+    'Köröm|Nails|Unghii',
+    'Smink|Makeup|Machiaj'
+  ];
+  pills.forEach((p,i)=>{
+    if(i===0){ p.textContent=allLabel; return; }
+    const cn=tl.catNames[pillVals[i]];
+    if(cn) p.textContent=cn;
+  });
+  // catFilter select options translation
+  const catFilter=document.getElementById('catFilter');
+  if(catFilter){
+    const catOpts=catFilter.querySelectorAll('option[value]');
+    catOpts.forEach(opt=>{
+      if(!opt.value) return; // skip the "all" option (handled by setText above)
+      const cn=tl.catNames[opt.value];
+      if(cn) opt.textContent=cn;
+    });
+  }
+  // login modal
+  const regVisible=el('registerForm')&&el('registerForm').style.display!=='none';
+  setText('loginModalTitle',regVisible?tl.registerTitle:tl.loginTitle);
+  // Google button — find the text node after svg
+  const gbtn=el('googleBtn');
+  if(gbtn){
+    const nodes=[...gbtn.childNodes];
+    const textNode=nodes.find(n=>n.nodeType===3&&n.textContent.trim());
+    if(textNode) textNode.textContent=' '+tl.googleBtn;
+    else gbtn.appendChild(document.createTextNode(' '+tl.googleBtn));
+  }
+  setText('orDividerText',tl.orDivider);
+  setText('loginEmailLabel',tl.emailLabel);
+  setText('loginPassLabel',tl.passLabel);
+  setText('loginSubmitBtn',tl.loginSubmit);
+  setText('loginSwitchLink',tl.switchToReg);
+  setText('regNameLabel',tl.nameLabel);
+  setText('regEmailLabel',tl.emailLabel);
+  setText('regPassLabel',tl.passLabel);
+  setText('regSubmitBtn',tl.regSubmit);
+  setText('regSwitchLink',tl.switchToLogin);
+  // edit modal
+  setText('editModalTitle',tl.editTitle);
+  setText('editNameLabel',tl.editNameL);
+  setText('editCityLabel',tl.editCityL);
+  setText('editDescLabel',tl.editDescL);
+  setText('editUrlLabel',tl.editUrlL);
+  setText('editCatLabel',tl.editCatL);
+  setText('editSaveBtn',tl.editSave);
+  // editCat select options translation
+  const editCat=document.getElementById('editCat');
+  if(editCat){
+    editCat.querySelectorAll('option[value]').forEach(opt=>{
+      const cn=tl.catNames[opt.value];
+      if(cn) opt.textContent=cn;
+    });
+  }
+  // profile modal
+  setText('profileEditBtn','✎ '+tl.profileEdit);
+  setText('galleryLabel',tl.galleryLabel);
+  setText('reviewsLabel',tl.reviewsLabel);
+  setPlaceholder('reviewText',tl.reviewPlaceholder);
+  setText('reviewSubmitBtn',tl.reviewSubmit);
+  setText('profileStarsLabel',tl.ratingLabel);
+  // admin
+  setText('adminPanelTitle',tl.adminPanel);
+  updateNavAuth();
+  buildCityFilter();
+}
+
+// --- INIT ---
+document.getElementById('cityFilter').value='';
+document.getElementById('catFilter').value='';
+loadApps();
+applyLang();
+document.getElementById('searchInput').addEventListener('input', renderCards);
+document.getElementById('cityFilter').addEventListener('change', renderCards);
+document.getElementById('catFilter').addEventListener('change', renderCards);
+</script>
+
+<!-- CROP MODAL -->
+<div class="overlay" id="cropOverlay" style="z-index:1100;">
+  <div style="background:#111116;border:1px solid #1e1e26;border-radius:12px;padding:24px;max-width:420px;width:95%;display:flex;flex-direction:column;gap:16px;">
+    <div style="font-family:'Cormorant',serif;font-size:1.3rem;color:#f0ece4;letter-spacing:1px;">Körbevágás</div>
+    <div style="position:relative;width:100%;aspect-ratio:1;overflow:hidden;background:#070709;border-radius:8px;">
+      <img id="cropImg" style="max-width:none;position:absolute;cursor:move;" draggable="false" alt="">
+      <div id="cropCircle" style="position:absolute;border:2px solid #c9a96e;border-radius:50%;box-shadow:0 0 0 9999px rgba(0,0,0,.6);pointer-events:none;"></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="font-size:11px;color:#4a4740;letter-spacing:1px;">ZOOM</span>
+      <input type="range" id="cropZoom" min="1" max="3" step="0.01" value="1" style="flex:1;accent-color:#c9a96e;">
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <button id="cropCancelBtn" style="background:none;border:1px solid #252530;color:#8a8478;border-radius:3px;padding:8px 18px;font-family:'Outfit',sans-serif;font-size:12px;cursor:pointer;">Mégse</button>
+      <button id="cropSaveBtn" style="background:rgba(201,169,110,.12);border:1px solid #c9a96e;color:#c9a96e;border-radius:3px;padding:8px 18px;font-family:'Outfit',sans-serif;font-size:12px;cursor:pointer;">Mentés</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>
